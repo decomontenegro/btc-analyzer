@@ -350,11 +350,13 @@
                 scenario,
                 probability,
                 phases: {
-                    PSY: { status: '✅', desc: 'Preliminary Supply' },
-                    BC: { status: '✅', desc: `Buying Climax em $${ath.toLocaleString()}` },
-                    AR: { status: dropFromATH > 10 ? '✅' : '🔄', desc: 'Automatic Reaction' },
-                    ST: { status: '⚠️', desc: 'Secondary Test' },
-                    SOW: { status: '🔄', desc: 'Sign of Weakness em teste' }
+                    PSY: { status: '✅', desc: 'Preliminary Supply', price: ath * 0.95 },
+                    BC: { status: '✅', desc: 'Buying Climax', price: ath },
+                    AR: { status: dropFromATH > 10 ? '✅' : '🔄', desc: 'Automatic Reaction', price: ath * 0.85 },
+                    ST: { status: '⚠️', desc: 'Secondary Test', price: ath * 0.92 },
+                    SOW: { status: '🔄', desc: 'Sign of Weakness', price: currentPrice },
+                    LPSY: { status: '🔜', desc: 'Last Point of Supply', price: ath * 0.88 },
+                    UTAD: { status: '❓', desc: 'Upthrust After Distribution', price: ath * 1.02 }
                 }
             };
         }
@@ -478,9 +480,12 @@
                             <span class="indicator-value" style="color: var(--accent-red)">${wyckoff.dropFromATH.toFixed(1)}%</span>
                         </div>
                         ${Object.entries(wyckoff.phases).map(([phase, data]) => `
-                            <div class="wyckoff-phase">
-                                <span class="phase-status">${data.status}</span>
-                                <span><strong>${phase}</strong>: ${data.desc}</span>
+                            <div class="wyckoff-phase" style="display: flex; justify-content: space-between; align-items: center;">
+                                <span>
+                                    <span class="phase-status">${data.status}</span>
+                                    <strong>${phase}</strong>: ${data.desc}
+                                </span>
+                                <span style="color: var(--accent-blue); font-weight: bold;">$${data.price.toLocaleString(undefined, {maximumFractionDigits: 0})}</span>
                             </div>
                         `).join('')}
                         <div class="scenario-box">
