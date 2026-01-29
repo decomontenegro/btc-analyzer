@@ -525,24 +525,64 @@
                 <div class="grid">
                     <div class="card">
                         <h2>📈 Sinais LONG</h2>
-                        ${levels.supports.filter(s => s < currentPrice).slice(0, 2).map(s => `
-                            <div class="signal-box signal-long">
-                                <strong>Entrada:</strong> $${s.toLocaleString(undefined, {maximumFractionDigits: 0})}<br>
-                                <strong>Stop Loss:</strong> $${(s * 0.97).toLocaleString(undefined, {maximumFractionDigits: 0})}<br>
-                                <strong>Tipo:</strong> Suporte
-                            </div>
-                        `).join('') || '<p style="color: var(--text-secondary)">Nenhum sinal de compra no momento</p>'}
+                        <div class="signal-box signal-long">
+                            <strong>Entrada Agressiva:</strong> $${(currentPrice * 0.95).toLocaleString(undefined, {maximumFractionDigits: 0})}<br>
+                            <strong>Stop Loss:</strong> $${(currentPrice * 0.92).toLocaleString(undefined, {maximumFractionDigits: 0})}<br>
+                            <strong>Take Profit:</strong> $${(currentPrice * 1.10).toLocaleString(undefined, {maximumFractionDigits: 0})}<br>
+                            <strong>R/R:</strong> 1:3.3
+                        </div>
+                        <div class="signal-box signal-long">
+                            <strong>Entrada Conservadora:</strong> $${(fib['0.618']).toLocaleString(undefined, {maximumFractionDigits: 0})}<br>
+                            <strong>Stop Loss:</strong> $${(fib['0.786']).toLocaleString(undefined, {maximumFractionDigits: 0})}<br>
+                            <strong>Take Profit:</strong> $${(currentPrice * 1.15).toLocaleString(undefined, {maximumFractionDigits: 0})}<br>
+                            <strong>R/R:</strong> 1:4
+                        </div>
+                        <div class="signal-box signal-long">
+                            <strong>Entrada "Gift":</strong> $${(fib['0.786']).toLocaleString(undefined, {maximumFractionDigits: 0})}<br>
+                            <strong>Stop Loss:</strong> $${(fib['0.786'] * 0.95).toLocaleString(undefined, {maximumFractionDigits: 0})}<br>
+                            <strong>Take Profit:</strong> $${sma50.toLocaleString(undefined, {maximumFractionDigits: 0})}<br>
+                            <strong>R/R:</strong> 1:5+
+                        </div>
                     </div>
                     
                     <div class="card">
                         <h2>📉 Sinais SHORT</h2>
-                        ${levels.resistances.filter(r => r > currentPrice).slice(0, 2).map(r => `
-                            <div class="signal-box signal-short">
-                                <strong>Entrada:</strong> $${r.toLocaleString(undefined, {maximumFractionDigits: 0})}<br>
-                                <strong>Stop Loss:</strong> $${(r * 1.03).toLocaleString(undefined, {maximumFractionDigits: 0})}<br>
-                                <strong>Tipo:</strong> Resistência
-                            </div>
-                        `).join('') || '<p style="color: var(--text-secondary)">Nenhum sinal de venda no momento</p>'}
+                        <div class="signal-box signal-short">
+                            <strong>Entrada:</strong> $${(sma20).toLocaleString(undefined, {maximumFractionDigits: 0})}<br>
+                            <strong>Stop Loss:</strong> $${(sma20 * 1.03).toLocaleString(undefined, {maximumFractionDigits: 0})}<br>
+                            <strong>Take Profit:</strong> $${(currentPrice * 0.90).toLocaleString(undefined, {maximumFractionDigits: 0})}<br>
+                            <strong>R/R:</strong> 1:3
+                        </div>
+                        <div class="signal-box signal-short">
+                            <strong>Entrada:</strong> $${(fib['0.382']).toLocaleString(undefined, {maximumFractionDigits: 0})}<br>
+                            <strong>Stop Loss:</strong> $${(fib['0.236']).toLocaleString(undefined, {maximumFractionDigits: 0})}<br>
+                            <strong>Take Profit:</strong> $${(fib['0.618']).toLocaleString(undefined, {maximumFractionDigits: 0})}<br>
+                            <strong>R/R:</strong> 1:3.5
+                        </div>
+                        <div class="signal-box signal-short">
+                            <strong>Entrada Wyckoff LPSY:</strong> $${(sma50).toLocaleString(undefined, {maximumFractionDigits: 0})}<br>
+                            <strong>Stop Loss:</strong> $${(sma50 * 1.04).toLocaleString(undefined, {maximumFractionDigits: 0})}<br>
+                            <strong>Take Profit:</strong> $${(wyckoff.ath * 0.60).toLocaleString(undefined, {maximumFractionDigits: 0})}<br>
+                            <strong>Tipo:</strong> Last Point of Supply
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card" style="margin-top: 20px;">
+                    <h2>🎯 Alvos Wyckoff</h2>
+                    <div class="grid" style="margin-top: 15px;">
+                        <div>
+                            <h4 style="color: var(--accent-red);">Se DISTRIBUIÇÃO:</h4>
+                            <p>Alvo 1: $${(wyckoff.ath * 0.70).toLocaleString(undefined, {maximumFractionDigits: 0})}</p>
+                            <p>Alvo 2: $${(wyckoff.ath * 0.60).toLocaleString(undefined, {maximumFractionDigits: 0})}</p>
+                            <p>Alvo 3: $${(wyckoff.ath * 0.50).toLocaleString(undefined, {maximumFractionDigits: 0})}</p>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--accent-green);">Se RE-ACUMULAÇÃO:</h4>
+                            <p>Spring: $${(currentPrice * 0.90).toLocaleString(undefined, {maximumFractionDigits: 0})}</p>
+                            <p>SOS: $${(sma50).toLocaleString(undefined, {maximumFractionDigits: 0})}</p>
+                            <p>Breakout: $${(wyckoff.ath * 1.10).toLocaleString(undefined, {maximumFractionDigits: 0})}</p>
+                        </div>
                     </div>
                 </div>
                 
