@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🐺 BTC Analyzer - Análise Técnica Diária</title>
+    <title>🐺 Crypto Analyzer - BTC | ETH | SOL</title>
     <style>
         :root {
             --bg-primary: #0d1117;
@@ -15,175 +15,159 @@
             --accent-red: #f85149;
             --accent-yellow: #d29922;
             --accent-blue: #58a6ff;
+            --accent-purple: #a855f7;
+            --accent-orange: #f97316;
             --border-color: #30363d;
         }
         
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: var(--bg-primary);
             color: var(--text-primary);
             line-height: 1.6;
             min-height: 100vh;
         }
         
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
         
         header {
             text-align: center;
-            padding: 40px 20px;
+            padding: 30px 20px;
             background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
             border-bottom: 1px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+        
+        header h1 { font-size: 2rem; margin-bottom: 10px; }
+        header .subtitle { color: var(--text-secondary); }
+        
+        /* Tab Navigation */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
             margin-bottom: 30px;
+            flex-wrap: wrap;
         }
         
-        header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
-        
-        header .subtitle {
-            color: var(--text-secondary);
+        .tab-btn {
+            padding: 15px 30px;
+            border: 2px solid var(--border-color);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border-radius: 10px;
+            cursor: pointer;
             font-size: 1.1rem;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         
+        .tab-btn:hover { border-color: var(--accent-blue); }
+        .tab-btn.active { border-color: var(--accent-blue); background: var(--bg-tertiary); }
+        .tab-btn.btc.active { border-color: var(--accent-orange); }
+        .tab-btn.eth.active { border-color: var(--accent-purple); }
+        .tab-btn.sol.active { border-color: var(--accent-green); }
+        
+        .tab-icon { font-size: 1.5rem; }
+        
+        /* Price Banner */
         .price-banner {
             background: var(--bg-secondary);
             border: 1px solid var(--border-color);
             border-radius: 12px;
-            padding: 30px;
+            padding: 25px;
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
         
-        .price-banner .price {
-            font-size: 3rem;
-            font-weight: bold;
-            color: var(--accent-blue);
-        }
+        .price-banner .asset-name { font-size: 1.2rem; color: var(--text-secondary); }
+        .price-banner .price { font-size: 2.5rem; font-weight: bold; }
+        .price-banner.btc .price { color: var(--accent-orange); }
+        .price-banner.eth .price { color: var(--accent-purple); }
+        .price-banner.sol .price { color: var(--accent-green); }
         
-        .price-banner .change {
-            font-size: 1.2rem;
-            margin-top: 10px;
-        }
-        
+        .price-banner .change { font-size: 1.1rem; margin-top: 5px; }
         .change.positive { color: var(--accent-green); }
         .change.negative { color: var(--accent-red); }
         
+        .price-banner .market-data {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .market-data-item { text-align: center; }
+        .market-data-item .label { font-size: 0.85rem; color: var(--text-secondary); }
+        .market-data-item .value { font-weight: bold; }
+        
+        /* Grid */
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 20px;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
         
         .card {
             background: var(--bg-secondary);
             border: 1px solid var(--border-color);
             border-radius: 12px;
-            padding: 25px;
+            padding: 20px;
         }
         
         .card h2 {
-            font-size: 1.3rem;
-            margin-bottom: 20px;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
             padding-bottom: 10px;
             border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            gap: 10px;
         }
         
         .indicator-row {
             display: flex;
             justify-content: space-between;
-            padding: 10px 0;
+            padding: 8px 0;
             border-bottom: 1px solid var(--bg-tertiary);
         }
         
-        .indicator-row:last-child {
-            border-bottom: none;
-        }
-        
-        .indicator-label {
-            color: var(--text-secondary);
-        }
-        
-        .indicator-value {
-            font-weight: 600;
-        }
+        .indicator-row:last-child { border-bottom: none; }
+        .indicator-label { color: var(--text-secondary); font-size: 0.9rem; }
+        .indicator-value { font-weight: 600; }
         
         .wyckoff-phase {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 10px;
-            padding: 8px 0;
+            padding: 6px 0;
         }
         
-        .phase-status {
-            font-size: 1.2rem;
-        }
+        .phase-status { font-size: 1.1rem; margin-right: 8px; }
         
         .scenario-box {
             background: var(--bg-tertiary);
             border-radius: 8px;
-            padding: 15px;
-            margin-top: 15px;
+            padding: 12px;
+            margin-top: 12px;
             text-align: center;
         }
         
         .scenario-box .scenario-name {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: bold;
             color: var(--accent-yellow);
         }
         
-        .scenario-box .probability {
-            color: var(--text-secondary);
-            margin-top: 5px;
-        }
-        
-        .levels-list {
-            list-style: none;
-        }
-        
-        .levels-list li {
-            padding: 8px 12px;
-            margin: 5px 0;
-            border-radius: 6px;
-            display: flex;
-            justify-content: space-between;
-        }
-        
-        .resistance {
-            background: rgba(248, 81, 73, 0.1);
-            border-left: 3px solid var(--accent-red);
-        }
-        
-        .support {
-            background: rgba(63, 185, 80, 0.1);
-            border-left: 3px solid var(--accent-green);
-        }
-        
-        .current-price {
-            background: rgba(88, 166, 255, 0.2);
-            border-left: 3px solid var(--accent-blue);
-            font-weight: bold;
-        }
-        
         .signal-box {
-            padding: 15px;
+            padding: 12px;
             border-radius: 8px;
-            margin: 10px 0;
+            margin: 8px 0;
+            font-size: 0.9rem;
         }
         
         .signal-long {
@@ -196,48 +180,70 @@
             border: 1px solid var(--accent-red);
         }
         
+        .levels-list { list-style: none; }
+        
+        .levels-list li {
+            padding: 6px 10px;
+            margin: 4px 0;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+        }
+        
+        .resistance {
+            background: rgba(248, 81, 73, 0.1);
+            border-left: 3px solid var(--accent-red);
+        }
+        
+        .support {
+            background: rgba(63, 185, 80, 0.1);
+            border-left: 3px solid var(--accent-green);
+        }
+        
+        .current-price-level {
+            background: rgba(88, 166, 255, 0.2);
+            border-left: 3px solid var(--accent-blue);
+            font-weight: bold;
+        }
+        
         .disclaimer {
             background: var(--bg-tertiary);
             border: 1px solid var(--accent-yellow);
             border-radius: 8px;
-            padding: 20px;
-            margin-top: 30px;
+            padding: 15px;
+            margin-top: 25px;
             text-align: center;
+            font-size: 0.9rem;
         }
         
-        .disclaimer h3 {
-            color: var(--accent-yellow);
-            margin-bottom: 10px;
-        }
+        .disclaimer h3 { color: var(--accent-yellow); margin-bottom: 8px; }
         
         .update-time {
             text-align: center;
             color: var(--text-secondary);
-            margin-top: 20px;
             padding: 20px;
+            font-size: 0.9rem;
         }
         
         footer {
             text-align: center;
-            padding: 30px;
+            padding: 25px;
             color: var(--text-secondary);
             border-top: 1px solid var(--border-color);
-            margin-top: 40px;
+            margin-top: 30px;
         }
         
-        .loading {
-            text-align: center;
-            padding: 50px;
-        }
+        .loading { text-align: center; padding: 50px; }
         
         .spinner {
             border: 4px solid var(--bg-tertiary);
             border-top: 4px solid var(--accent-blue);
             border-radius: 50%;
-            width: 50px;
-            height: 50px;
+            width: 40px;
+            height: 40px;
             animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
+            margin: 0 auto 15px;
         }
         
         @keyframes spin {
@@ -245,175 +251,199 @@
             100% { transform: rotate(360deg); }
         }
         
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
         @media (max-width: 768px) {
-            header h1 { font-size: 1.8rem; }
+            header h1 { font-size: 1.5rem; }
             .price-banner .price { font-size: 2rem; }
             .grid { grid-template-columns: 1fr; }
+            .tab-btn { padding: 10px 15px; font-size: 0.9rem; }
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>🐺 BTC Analyzer</h1>
-        <p class="subtitle">Análise Técnica Automatizada - Wyckoff, Elliott Wave, Suportes e Resistências</p>
+        <h1>🐺 Crypto Analyzer</h1>
+        <p class="subtitle">Análise Técnica: Wyckoff, Elliott Wave, Suportes e Resistências</p>
     </header>
     
     <div class="container">
-        <div id="content">
+        <div class="tabs">
+            <button class="tab-btn btc active" onclick="switchTab('btc')">
+                <span class="tab-icon">₿</span> Bitcoin
+            </button>
+            <button class="tab-btn eth" onclick="switchTab('eth')">
+                <span class="tab-icon">Ξ</span> Ethereum
+            </button>
+            <button class="tab-btn sol" onclick="switchTab('sol')">
+                <span class="tab-icon">◎</span> Solana
+            </button>
+        </div>
+        
+        <div id="btc-content" class="tab-content active">
             <div class="loading">
                 <div class="spinner"></div>
-                <p>Carregando análise...</p>
+                <p>Carregando BTC...</p>
             </div>
         </div>
+        
+        <div id="eth-content" class="tab-content">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Carregando ETH...</p>
+            </div>
+        </div>
+        
+        <div id="sol-content" class="tab-content">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Carregando SOL...</p>
+            </div>
+        </div>
+        
+        <div class="disclaimer">
+            <h3>⚠️ DISCLAIMER</h3>
+            <p>Análise <strong>educacional</strong>. Não é recomendação de investimento. Use gerenciamento de risco.</p>
+        </div>
+        
+        <div class="update-time" id="update-time"></div>
     </div>
     
     <footer>
         <p>Criado por Lobo 🐺 | Cultura Builder</p>
-        <p style="margin-top: 10px; font-size: 0.9rem;">Dados: CoinGecko API | Atualização: Diária</p>
+        <p style="margin-top: 8px; font-size: 0.85rem;">Dados: CoinGecko API | Auto-refresh: 5 min</p>
     </footer>
 
     <script>
-        // Configuração
         const COINGECKO_API = 'https://api.coingecko.com/api/v3';
         
-        // Busca dados
-        async function fetchData() {
+        const ASSETS = {
+            btc: { id: 'bitcoin', name: 'Bitcoin', symbol: 'BTC', color: 'orange' },
+            eth: { id: 'ethereum', name: 'Ethereum', symbol: 'ETH', color: 'purple' },
+            sol: { id: 'solana', name: 'Solana', symbol: 'SOL', color: 'green' }
+        };
+        
+        let currentTab = 'btc';
+        let dataCache = {};
+        
+        function switchTab(tab) {
+            currentTab = tab;
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            document.querySelector(`.tab-btn.${tab}`).classList.add('active');
+            document.getElementById(`${tab}-content`).classList.add('active');
+            
+            if (!dataCache[tab]) {
+                loadAsset(tab);
+            }
+        }
+        
+        async function fetchAssetData(assetKey) {
+            const asset = ASSETS[assetKey];
             try {
-                // Preço atual
-                const priceRes = await fetch(`${COINGECKO_API}/simple/price?ids=bitcoin&vs_currencies=usd&include_24hr_change=true`);
-                const priceData = await priceRes.json();
+                const [priceRes, histRes] = await Promise.all([
+                    fetch(`${COINGECKO_API}/simple/price?ids=${asset.id}&vs_currencies=usd&include_24hr_change=true&include_market_cap=true&include_24hr_vol=true`),
+                    fetch(`${COINGECKO_API}/coins/${asset.id}/market_chart?vs_currency=usd&days=200`)
+                ]);
                 
-                // Histórico
-                const histRes = await fetch(`${COINGECKO_API}/coins/bitcoin/market_chart?vs_currency=usd&days=200`);
+                const priceData = await priceRes.json();
                 const histData = await histRes.json();
                 
                 return {
-                    currentPrice: priceData.bitcoin.usd,
-                    change24h: priceData.bitcoin.usd_24h_change,
+                    currentPrice: priceData[asset.id].usd,
+                    change24h: priceData[asset.id].usd_24h_change,
+                    marketCap: priceData[asset.id].usd_market_cap,
+                    volume24h: priceData[asset.id].usd_24h_vol,
                     prices: histData.prices,
                     volumes: histData.total_volumes
                 };
             } catch (error) {
-                console.error('Erro ao buscar dados:', error);
+                console.error(`Erro ao buscar ${assetKey}:`, error);
                 return null;
             }
         }
         
-        // Calcula RSI
         function calculateRSI(prices, period = 14) {
             const changes = [];
             for (let i = 1; i < prices.length; i++) {
                 changes.push(prices[i] - prices[i-1]);
             }
-            
             let gains = 0, losses = 0;
             for (let i = changes.length - period; i < changes.length; i++) {
                 if (changes[i] > 0) gains += changes[i];
                 else losses -= changes[i];
             }
-            
             const avgGain = gains / period;
             const avgLoss = losses / period;
+            if (avgLoss === 0) return 100;
             const rs = avgGain / avgLoss;
             return 100 - (100 / (1 + rs));
         }
         
-        // Calcula SMA
         function calculateSMA(prices, period) {
             const slice = prices.slice(-period);
             return slice.reduce((a, b) => a + b, 0) / period;
         }
         
-        // Análise Wyckoff
         function analyzeWyckoff(prices, currentPrice) {
             const ath = Math.max(...prices);
+            const atl = Math.min(...prices.slice(-90));
             const dropFromATH = ((ath - currentPrice) / ath) * 100;
             
             let scenario, probability;
-            if (dropFromATH > 25) {
-                scenario = 'DISTRIBUIÇÃO CONFIRMADA';
+            if (dropFromATH > 30) {
+                scenario = 'DISTRIBUIÇÃO AVANÇADA';
                 probability = 70;
-            } else if (dropFromATH > 15) {
-                scenario = 'POSSÍVEL DISTRIBUIÇÃO';
-                probability = 55;
+            } else if (dropFromATH > 20) {
+                scenario = 'DISTRIBUIÇÃO';
+                probability = 60;
             } else if (dropFromATH > 10) {
-                scenario = 'CORREÇÃO / INDEFINIDO';
+                scenario = 'POSSÍVEL DISTRIBUIÇÃO';
+                probability = 50;
+            } else if (dropFromATH < 5) {
+                scenario = 'TENDÊNCIA DE ALTA';
                 probability = 45;
             } else {
-                scenario = 'TENDÊNCIA DE ALTA';
+                scenario = 'INDEFINIDO';
                 probability = 40;
             }
             
             return {
-                ath,
-                dropFromATH,
-                scenario,
-                probability,
+                ath, atl, dropFromATH, scenario, probability,
                 phases: {
                     PSY: { status: '✅', desc: 'Preliminary Supply', price: ath * 0.95 },
                     BC: { status: '✅', desc: 'Buying Climax', price: ath },
                     AR: { status: dropFromATH > 10 ? '✅' : '🔄', desc: 'Automatic Reaction', price: ath * 0.85 },
                     ST: { status: '⚠️', desc: 'Secondary Test', price: ath * 0.92 },
                     SOW: { status: '🔄', desc: 'Sign of Weakness', price: currentPrice },
-                    LPSY: { status: '🔜', desc: 'Last Point of Supply', price: ath * 0.88 },
-                    UTAD: { status: '❓', desc: 'Upthrust After Distribution', price: ath * 1.02 }
+                    LPSY: { status: '🔜', desc: 'Last Point Supply', price: ath * 0.88 },
+                    UTAD: { status: '❓', desc: 'Upthrust After Dist', price: ath * 1.02 }
                 }
             };
         }
         
-        // Encontra suportes e resistências
-        function findLevels(prices) {
-            const resistances = [];
-            const supports = [];
-            
-            for (let i = 10; i < prices.length - 10; i++) {
-                const window = prices.slice(i - 5, i + 5);
-                const max = Math.max(...window);
-                const min = Math.min(...window);
-                
-                if (prices[i] === max) resistances.push(prices[i]);
-                if (prices[i] === min) supports.push(prices[i]);
-            }
-            
-            // Agrupa níveis próximos
-            const clusterLevels = (levels) => {
-                if (levels.length === 0) return [];
-                levels.sort((a, b) => b - a);
-                const clusters = [];
-                let current = [levels[0]];
-                
-                for (let i = 1; i < levels.length; i++) {
-                    if ((current[0] - levels[i]) / current[0] < 0.03) {
-                        current.push(levels[i]);
-                    } else {
-                        clusters.push(current.reduce((a, b) => a + b) / current.length);
-                        current = [levels[i]];
-                    }
-                }
-                clusters.push(current.reduce((a, b) => a + b) / current.length);
-                return clusters.slice(0, 5);
-            };
-            
-            return {
-                resistances: clusterLevels(resistances),
-                supports: clusterLevels(supports)
-            };
-        }
-        
-        // Fibonacci levels
         function calculateFibonacci(high, low) {
             const range = high - low;
             return {
-                '0.236': high - range * 0.236,
-                '0.382': high - range * 0.382,
-                '0.500': high - range * 0.500,
-                '0.618': high - range * 0.618,
-                '0.786': high - range * 0.786
+                '23.6%': high - range * 0.236,
+                '38.2%': high - range * 0.382,
+                '50.0%': high - range * 0.500,
+                '61.8%': high - range * 0.618,
+                '78.6%': high - range * 0.786
             };
         }
         
-        // Renderiza página
-        function render(data) {
+        function formatNumber(num, decimals = 2) {
+            if (num >= 1e12) return (num / 1e12).toFixed(decimals) + 'T';
+            if (num >= 1e9) return (num / 1e9).toFixed(decimals) + 'B';
+            if (num >= 1e6) return (num / 1e6).toFixed(decimals) + 'M';
+            if (num >= 1e3) return (num / 1e3).toFixed(decimals) + 'K';
+            return num.toFixed(decimals);
+        }
+        
+        function renderAsset(assetKey, data) {
+            const asset = ASSETS[assetKey];
             const prices = data.prices.map(p => p[1]);
             const currentPrice = data.currentPrice;
             const change24h = data.change24h;
@@ -421,27 +451,44 @@
             const rsi = calculateRSI(prices);
             const sma20 = calculateSMA(prices, 20);
             const sma50 = calculateSMA(prices, 50);
-            const sma200 = calculateSMA(prices, 200);
+            const sma200 = calculateSMA(prices, Math.min(200, prices.length));
             
             const wyckoff = analyzeWyckoff(prices, currentPrice);
-            const levels = findLevels(prices);
-            const fib = calculateFibonacci(wyckoff.ath, Math.min(...prices));
+            const fib = calculateFibonacci(wyckoff.ath, wyckoff.atl);
             
             const changeClass = change24h >= 0 ? 'positive' : 'negative';
             const changeSign = change24h >= 0 ? '+' : '';
             
-            // Determina viés
             let bias = 'NEUTRO';
             let biasColor = 'var(--accent-yellow)';
-            if (rsi < 30) { bias = 'OVERSOLD - Possível bounce'; biasColor = 'var(--accent-green)'; }
-            else if (rsi > 70) { bias = 'OVERBOUGHT - Possível correção'; biasColor = 'var(--accent-red)'; }
-            else if (currentPrice < sma200) { bias = 'BEARISH - Abaixo da SMA200'; biasColor = 'var(--accent-red)'; }
-            else if (currentPrice > sma50) { bias = 'BULLISH - Acima das médias'; biasColor = 'var(--accent-green)'; }
+            if (rsi < 30) { bias = 'OVERSOLD'; biasColor = 'var(--accent-green)'; }
+            else if (rsi > 70) { bias = 'OVERBOUGHT'; biasColor = 'var(--accent-red)'; }
+            else if (currentPrice < sma200) { bias = 'BEARISH'; biasColor = 'var(--accent-red)'; }
+            else if (currentPrice > sma50) { bias = 'BULLISH'; biasColor = 'var(--accent-green)'; }
             
-            document.getElementById('content').innerHTML = `
-                <div class="price-banner">
-                    <div class="price">$${currentPrice.toLocaleString()}</div>
+            document.getElementById(`${assetKey}-content`).innerHTML = `
+                <div class="price-banner ${assetKey}">
+                    <div class="asset-name">${asset.name} (${asset.symbol})</div>
+                    <div class="price">$${currentPrice.toLocaleString(undefined, {maximumFractionDigits: 2})}</div>
                     <div class="change ${changeClass}">${changeSign}${change24h.toFixed(2)}% (24h)</div>
+                    <div class="market-data">
+                        <div class="market-data-item">
+                            <div class="label">Market Cap</div>
+                            <div class="value">$${formatNumber(data.marketCap)}</div>
+                        </div>
+                        <div class="market-data-item">
+                            <div class="label">Volume 24h</div>
+                            <div class="value">$${formatNumber(data.volume24h)}</div>
+                        </div>
+                        <div class="market-data-item">
+                            <div class="label">ATH</div>
+                            <div class="value">$${wyckoff.ath.toLocaleString(undefined, {maximumFractionDigits: 0})}</div>
+                        </div>
+                        <div class="market-data-item">
+                            <div class="label">Queda ATH</div>
+                            <div class="value" style="color: var(--accent-red)">${wyckoff.dropFromATH.toFixed(1)}%</div>
+                        </div>
+                    </div>
                 </div>
                 
                 <div class="grid">
@@ -453,77 +500,55 @@
                         </div>
                         <div class="indicator-row">
                             <span class="indicator-label">SMA 20</span>
-                            <span class="indicator-value">$${sma20.toLocaleString(undefined, {maximumFractionDigits: 0})}</span>
+                            <span class="indicator-value">$${sma20.toLocaleString(undefined, {maximumFractionDigits: 2})}</span>
                         </div>
                         <div class="indicator-row">
                             <span class="indicator-label">SMA 50</span>
-                            <span class="indicator-value">$${sma50.toLocaleString(undefined, {maximumFractionDigits: 0})}</span>
+                            <span class="indicator-value">$${sma50.toLocaleString(undefined, {maximumFractionDigits: 2})}</span>
                         </div>
                         <div class="indicator-row">
                             <span class="indicator-label">SMA 200</span>
-                            <span class="indicator-value">$${sma200.toLocaleString(undefined, {maximumFractionDigits: 0})}</span>
+                            <span class="indicator-value">$${sma200.toLocaleString(undefined, {maximumFractionDigits: 2})}</span>
                         </div>
                         <div class="indicator-row">
                             <span class="indicator-label">Viés</span>
-                            <span class="indicator-value" style="color: ${biasColor}">${bias.split(' - ')[0]}</span>
+                            <span class="indicator-value" style="color: ${biasColor}">${bias}</span>
                         </div>
                     </div>
                     
                     <div class="card">
                         <h2>📉 Análise Wyckoff</h2>
-                        <div class="indicator-row">
-                            <span class="indicator-label">ATH</span>
-                            <span class="indicator-value">$${wyckoff.ath.toLocaleString(undefined, {maximumFractionDigits: 0})}</span>
-                        </div>
-                        <div class="indicator-row">
-                            <span class="indicator-label">Queda do ATH</span>
-                            <span class="indicator-value" style="color: var(--accent-red)">${wyckoff.dropFromATH.toFixed(1)}%</span>
-                        </div>
-                        ${Object.entries(wyckoff.phases).map(([phase, data]) => `
-                            <div class="wyckoff-phase" style="display: flex; justify-content: space-between; align-items: center;">
-                                <span>
-                                    <span class="phase-status">${data.status}</span>
-                                    <strong>${phase}</strong>: ${data.desc}
-                                </span>
-                                <span style="color: var(--accent-blue); font-weight: bold;">$${data.price.toLocaleString(undefined, {maximumFractionDigits: 0})}</span>
+                        ${Object.entries(wyckoff.phases).map(([phase, d]) => `
+                            <div class="wyckoff-phase">
+                                <span><span class="phase-status">${d.status}</span> <strong>${phase}</strong></span>
+                                <span style="color: var(--accent-blue);">$${d.price.toLocaleString(undefined, {maximumFractionDigits: 0})}</span>
                             </div>
                         `).join('')}
                         <div class="scenario-box">
                             <div class="scenario-name">${wyckoff.scenario}</div>
-                            <div class="probability">Probabilidade: ${wyckoff.probability}%</div>
+                            <div style="color: var(--text-secondary); font-size: 0.9rem;">Prob: ${wyckoff.probability}%</div>
                         </div>
                     </div>
                     
                     <div class="card">
-                        <h2>🎯 Suportes e Resistências</h2>
-                        <ul class="levels-list">
-                            ${levels.resistances.filter(r => r > currentPrice).slice(0, 3).map(r => `
-                                <li class="resistance">
-                                    <span>🔴 Resistência</span>
-                                    <span>$${r.toLocaleString(undefined, {maximumFractionDigits: 0})}</span>
-                                </li>
-                            `).join('')}
-                            <li class="current-price">
-                                <span>📍 Preço Atual</span>
-                                <span>$${currentPrice.toLocaleString()}</span>
-                            </li>
-                            ${levels.supports.filter(s => s < currentPrice).slice(0, 3).map(s => `
-                                <li class="support">
-                                    <span>🟢 Suporte</span>
-                                    <span>$${s.toLocaleString(undefined, {maximumFractionDigits: 0})}</span>
-                                </li>
-                            `).join('')}
-                        </ul>
+                        <h2>📐 Fibonacci</h2>
+                        ${Object.entries(fib).map(([level, price]) => `
+                            <div class="indicator-row">
+                                <span class="indicator-label">${level}</span>
+                                <span class="indicator-value">$${price.toLocaleString(undefined, {maximumFractionDigits: 2})}</span>
+                            </div>
+                        `).join('')}
                     </div>
                     
                     <div class="card">
-                        <h2>📐 Níveis Fibonacci</h2>
-                        ${Object.entries(fib).map(([level, price]) => `
-                            <div class="indicator-row">
-                                <span class="indicator-label">${(parseFloat(level) * 100).toFixed(1)}%</span>
-                                <span class="indicator-value">$${price.toLocaleString(undefined, {maximumFractionDigits: 0})}</span>
-                            </div>
-                        `).join('')}
+                        <h2>🎯 Níveis</h2>
+                        <ul class="levels-list">
+                            <li class="resistance"><span>🔴 ATH</span><span>$${wyckoff.ath.toLocaleString(undefined, {maximumFractionDigits: 0})}</span></li>
+                            <li class="resistance"><span>🔴 SMA 200</span><span>$${sma200.toLocaleString(undefined, {maximumFractionDigits: 0})}</span></li>
+                            <li class="current-price-level"><span>📍 Atual</span><span>$${currentPrice.toLocaleString(undefined, {maximumFractionDigits: 2})}</span></li>
+                            <li class="support"><span>🟢 Fib 61.8%</span><span>$${fib['61.8%'].toLocaleString(undefined, {maximumFractionDigits: 0})}</span></li>
+                            <li class="support"><span>🟢 Fib 78.6%</span><span>$${fib['78.6%'].toLocaleString(undefined, {maximumFractionDigits: 0})}</span></li>
+                        </ul>
                     </div>
                 </div>
                 
@@ -531,101 +556,69 @@
                     <div class="card">
                         <h2>📈 Sinais LONG</h2>
                         <div class="signal-box signal-long">
-                            <strong>Entrada Agressiva:</strong> $${(currentPrice * 0.95).toLocaleString(undefined, {maximumFractionDigits: 0})}<br>
-                            <strong>Stop Loss:</strong> $${(currentPrice * 0.92).toLocaleString(undefined, {maximumFractionDigits: 0})}<br>
-                            <strong>Take Profit:</strong> $${(currentPrice * 1.10).toLocaleString(undefined, {maximumFractionDigits: 0})}<br>
-                            <strong>R/R:</strong> 1:3.3
+                            <strong>Agressivo:</strong> $${(currentPrice * 0.95).toLocaleString(undefined, {maximumFractionDigits: 2})}<br>
+                            <small>SL: $${(currentPrice * 0.92).toLocaleString(undefined, {maximumFractionDigits: 0})} | TP: $${(currentPrice * 1.10).toLocaleString(undefined, {maximumFractionDigits: 0})} | R/R: 1:3</small>
                         </div>
                         <div class="signal-box signal-long">
-                            <strong>Entrada Conservadora:</strong> $${(fib['0.618']).toLocaleString(undefined, {maximumFractionDigits: 0})}<br>
-                            <strong>Stop Loss:</strong> $${(fib['0.786']).toLocaleString(undefined, {maximumFractionDigits: 0})}<br>
-                            <strong>Take Profit:</strong> $${(currentPrice * 1.15).toLocaleString(undefined, {maximumFractionDigits: 0})}<br>
-                            <strong>R/R:</strong> 1:4
+                            <strong>Conservador (Fib 61.8%):</strong> $${fib['61.8%'].toLocaleString(undefined, {maximumFractionDigits: 2})}<br>
+                            <small>SL: $${fib['78.6%'].toLocaleString(undefined, {maximumFractionDigits: 0})} | TP: $${sma50.toLocaleString(undefined, {maximumFractionDigits: 0})} | R/R: 1:4</small>
                         </div>
                         <div class="signal-box signal-long">
-                            <strong>Entrada "Gift":</strong> $${(fib['0.786']).toLocaleString(undefined, {maximumFractionDigits: 0})}<br>
-                            <strong>Stop Loss:</strong> $${(fib['0.786'] * 0.95).toLocaleString(undefined, {maximumFractionDigits: 0})}<br>
-                            <strong>Take Profit:</strong> $${sma50.toLocaleString(undefined, {maximumFractionDigits: 0})}<br>
-                            <strong>R/R:</strong> 1:5+
+                            <strong>Gift (Fib 78.6%):</strong> $${fib['78.6%'].toLocaleString(undefined, {maximumFractionDigits: 2})}<br>
+                            <small>SL: $${(fib['78.6%'] * 0.95).toLocaleString(undefined, {maximumFractionDigits: 0})} | TP: $${sma200.toLocaleString(undefined, {maximumFractionDigits: 0})} | R/R: 1:5+</small>
                         </div>
                     </div>
                     
                     <div class="card">
                         <h2>📉 Sinais SHORT</h2>
                         <div class="signal-box signal-short">
-                            <strong>Entrada:</strong> $${(sma20).toLocaleString(undefined, {maximumFractionDigits: 0})}<br>
-                            <strong>Stop Loss:</strong> $${(sma20 * 1.03).toLocaleString(undefined, {maximumFractionDigits: 0})}<br>
-                            <strong>Take Profit:</strong> $${(currentPrice * 0.90).toLocaleString(undefined, {maximumFractionDigits: 0})}<br>
-                            <strong>R/R:</strong> 1:3
+                            <strong>SMA 20:</strong> $${sma20.toLocaleString(undefined, {maximumFractionDigits: 2})}<br>
+                            <small>SL: $${(sma20 * 1.03).toLocaleString(undefined, {maximumFractionDigits: 0})} | TP: $${(currentPrice * 0.90).toLocaleString(undefined, {maximumFractionDigits: 0})} | R/R: 1:3</small>
                         </div>
                         <div class="signal-box signal-short">
-                            <strong>Entrada:</strong> $${(fib['0.382']).toLocaleString(undefined, {maximumFractionDigits: 0})}<br>
-                            <strong>Stop Loss:</strong> $${(fib['0.236']).toLocaleString(undefined, {maximumFractionDigits: 0})}<br>
-                            <strong>Take Profit:</strong> $${(fib['0.618']).toLocaleString(undefined, {maximumFractionDigits: 0})}<br>
-                            <strong>R/R:</strong> 1:3.5
+                            <strong>Fib 38.2%:</strong> $${fib['38.2%'].toLocaleString(undefined, {maximumFractionDigits: 2})}<br>
+                            <small>SL: $${fib['23.6%'].toLocaleString(undefined, {maximumFractionDigits: 0})} | TP: $${fib['61.8%'].toLocaleString(undefined, {maximumFractionDigits: 0})} | R/R: 1:3</small>
                         </div>
                         <div class="signal-box signal-short">
-                            <strong>Entrada Wyckoff LPSY:</strong> $${(sma50).toLocaleString(undefined, {maximumFractionDigits: 0})}<br>
-                            <strong>Stop Loss:</strong> $${(sma50 * 1.04).toLocaleString(undefined, {maximumFractionDigits: 0})}<br>
-                            <strong>Take Profit:</strong> $${(wyckoff.ath * 0.60).toLocaleString(undefined, {maximumFractionDigits: 0})}<br>
-                            <strong>Tipo:</strong> Last Point of Supply
+                            <strong>LPSY Wyckoff:</strong> $${(wyckoff.ath * 0.88).toLocaleString(undefined, {maximumFractionDigits: 2})}<br>
+                            <small>SL: $${(wyckoff.ath * 0.92).toLocaleString(undefined, {maximumFractionDigits: 0})} | TP: $${(wyckoff.ath * 0.60).toLocaleString(undefined, {maximumFractionDigits: 0})} | R/R: 1:7</small>
                         </div>
                     </div>
-                </div>
-                
-                <div class="card" style="margin-top: 20px;">
-                    <h2>🎯 Alvos Wyckoff</h2>
-                    <div class="grid" style="margin-top: 15px;">
-                        <div>
-                            <h4 style="color: var(--accent-red);">Se DISTRIBUIÇÃO:</h4>
-                            <p>Alvo 1: $${(wyckoff.ath * 0.70).toLocaleString(undefined, {maximumFractionDigits: 0})}</p>
-                            <p>Alvo 2: $${(wyckoff.ath * 0.60).toLocaleString(undefined, {maximumFractionDigits: 0})}</p>
-                            <p>Alvo 3: $${(wyckoff.ath * 0.50).toLocaleString(undefined, {maximumFractionDigits: 0})}</p>
-                        </div>
-                        <div>
-                            <h4 style="color: var(--accent-green);">Se RE-ACUMULAÇÃO:</h4>
-                            <p>Spring: $${(currentPrice * 0.90).toLocaleString(undefined, {maximumFractionDigits: 0})}</p>
-                            <p>SOS: $${(sma50).toLocaleString(undefined, {maximumFractionDigits: 0})}</p>
-                            <p>Breakout: $${(wyckoff.ath * 1.10).toLocaleString(undefined, {maximumFractionDigits: 0})}</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="disclaimer">
-                    <h3>⚠️ DISCLAIMER</h3>
-                    <p>Esta análise é <strong>educacional</strong> e não constitui recomendação de investimento.</p>
-                    <p>Sempre use gerenciamento de risco e stop loss. O mercado pode fazer qualquer coisa.</p>
-                </div>
-                
-                <div class="update-time">
-                    <p>Última atualização: ${new Date().toLocaleString('pt-BR')}</p>
-                    <p>Próxima atualização automática: em 24 horas</p>
                 </div>
             `;
+            
+            dataCache[assetKey] = data;
         }
         
-        // Inicializa
-        async function init() {
-            const data = await fetchData();
+        async function loadAsset(assetKey) {
+            const data = await fetchAssetData(assetKey);
             if (data) {
-                render(data);
+                renderAsset(assetKey, data);
             } else {
-                document.getElementById('content').innerHTML = `
+                document.getElementById(`${assetKey}-content`).innerHTML = `
                     <div class="card" style="text-align: center;">
-                        <h2>❌ Erro ao carregar dados</h2>
+                        <h2>❌ Erro ao carregar ${ASSETS[assetKey].name}</h2>
                         <p>Tente novamente em alguns minutos.</p>
-                        <button onclick="location.reload()" style="margin-top: 20px; padding: 10px 20px; cursor: pointer;">
-                            Recarregar
-                        </button>
+                        <button onclick="loadAsset('${assetKey}')" style="margin-top: 15px; padding: 10px 20px; cursor: pointer;">Recarregar</button>
                     </div>
                 `;
             }
         }
         
-        init();
+        async function init() {
+            await loadAsset('btc');
+            document.getElementById('update-time').innerHTML = `
+                <p>Última atualização: ${new Date().toLocaleString('pt-BR')}</p>
+            `;
+        }
         
-        // Atualiza a cada 5 minutos
-        setInterval(init, 5 * 60 * 1000);
+        init();
+        setInterval(() => {
+            loadAsset(currentTab);
+            document.getElementById('update-time').innerHTML = `
+                <p>Última atualização: ${new Date().toLocaleString('pt-BR')}</p>
+            `;
+        }, 5 * 60 * 1000);
     </script>
 </body>
 </html>
